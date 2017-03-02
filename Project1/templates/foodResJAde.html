@@ -1,0 +1,19 @@
+doctype html
+html
+    head
+        title World's Meal
+        link (rel="stylesheet",href="/public/styles/bootstrap.min.css")
+        link (rel="stylesheet",href="/public/styles/main.css")
+
+    body
+        div.container
+            div.row
+                div.col-lg-12
+                    div.row
+                        div#custom-search-input
+                            div.input-group.col-md-12
+                                input (type="text", class="search-query form-control", placeholder="Type a location" )
+                                    span.input-group-btn
+                                        button(class="btn btn-danger",type="button")
+                                            span.glyphicon.glyphicon-search
+                    h1.page-header Meal from Italy

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <!-- Bootstrap Core CSS -->
+
+    <!-- Custom CSS -->
+    <link href="public/styles/grayscale.css" rel="stylesheet">
+    <link href="public/styles/main.css" rel="stylesheet">
+    <!-- Custom Fonts -->
+    <link href="public/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="public/styles/bootstrap.min.css" rel="stylesheet">
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script type="text/javascript">
+        var geocoder;
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(successFunction, errorFunction);
+        }
+        //Get the latitude and the longitude;
+        function successFunction(position) {
+            var lat = position.coords.latitude;
+            var lng = position.coords.longitude;
+            alert(codeLatLng(lat, lng));
+
+        }
+
+        function errorFunction(){
+            alert("Geocoder failed");
+        }
+
+        function initialize() {
+            geocoder = new google.maps.Geocoder();
+
+
+
+        }
+
+        function codeLatLng(lat, lng) {
+
+            var latlng = new google.maps.LatLng(lat, lng);
+            geocoder.geocode({'latLng': latlng}, function(results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    console.log(results)
+                    if (results[1]) {
+                        //formatted address
+                        alert(results[0].formatted_address)
+                        //find country name
+                        for (var i=0; i<results[0].address_components.length; i++) {
+                            for (var b=0;b<results[0].address_components[i].types.length;b++) {
+
+                                //there are different types that might hold a city admin_area_lvl_1 usually does in come cases looking for sublocality type will be more appropriate
+                                if (results[0].address_components[i].types[b] == "administrative_area_level_1") {
+                                    //this is the object you are looking for
+                                    city= results[0].address_components[i];
+                                   // alert(city);
+                                    break;
+                                }
+                            }
+                        }
+                        //city data
+                        document.getElementById("locatie").innerHTML= results[1].address_components[3].short_name.toString()+" , "+city.short_name.toString() ;
+
+
+                    } else {
+                        //alert("No results found");
+                    }
+                } else {
+                   // alert("Geocoder failed due to: " + status);
+                }
+            });
+        }
+    </script>
+    <title>Feed you trip</title>
+</head>
+<body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top" onload="initialize()">
+
+<!-- Navigation -->
+<nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
+                <i class="fa fa-bars"></i>
+            </button>
+            <ul class="nav navbar-nav">
+                <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
+                <li>
+                    <a class="page-scroll logo"><img src="public/img/logo.png" id="logo">World's Meal</img></a>
+                </li>
+            </ul>
+
+        </div>
+
+        <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
+            <ul class="nav navbar-nav">
+                <li>
+                   <a class="page-scroll location" id="locatie"> </a>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+    <!-- /.container -->
+</nav>
+
+<!-- Intro Div -->
+<div class="intro">
+    <div class="intro-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <h1 class="brand-heading">Feed your Trip</h1>
+                    <br><br>
+                    <p class="intro-text">Find out what you can eat in your location</p>
+                    <div class="row">
+                        <div id="custom-search-input">
+                            <div class="input-group col-md-12">
+                                <input type="search"  class="  search-query form-control" id="myInput" placeholder="Type an ingredient" onsearch="myFunction()" />
+
+                                <script>
+                                    function myFunction() {
+                                        var x = document.getElementById("myInput");
+                                        //window.alert(x.value);
+                                        window.location.href = "templates/foodResults.html";
+                                    }
+                                </script>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer>
+    <div class="container text-center">
+        <p class="footertext">Copyright &copy; Ludmila & Emilia 2015</p>
+    </div>
+</footer>
+</body>
+</html>
